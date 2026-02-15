@@ -4,7 +4,13 @@
 #      /_\ \ / / _ \___ ___  __| |_ | |____ _ _ _(_) |__
 #     / _ \ V /|   /___/ _ \/ _| ' \| / / _` | '_| | / /
 #    /_/ \_\_/ |_|_\   \___/\__|_||_|_\_\__,_|_| |_|_\_\
-                                                                                                           
+
+if [ -S /tmp/mpv-socket ]; then
+    if ! socat - /tmp/mpv-socket <<<'{"command": ["get_version"]}' >/dev/null 2>&1; then
+        rm /tmp/mpv-socket
+    fi
+fi
+
 if [ ! -S /tmp/mpv-socket ]; then
 	mpv --no-audio --idle --input-ipc-server=/tmp/mpv-socket --geometry=100%x100% --loop-file=inf & sleep 1
 fi
